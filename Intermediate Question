@@ -1,0 +1,93 @@
+Intermediate Questions
+1. What are the ways to trigger a Jenkins Job/Pipeline?
+There are many ways we can trigger a job in Jenkins. Some of the common ways are as below -
+
+Trigger an API (POST) request to the target job URL with the required data.
+Trigger it manually from the Jenkins web application.
+Trigger it using Jenkins CLI from the master/slave nodes.
+Time-based Scheduled Triggers like a cron job.
+Event-based Triggers like SCM Actions (Git Commit, Pull Requests), WebHooks, etc.
+Upstream/Downstream triggers by other Jenkins jobs.
+2. What is Jenkins Build Cause?
+Build Cause is a text attribute that represents what made a job's build to be triggered, say it could be a Jenkins User (from UI), Timer for Scheduled jobs, Upstream jobs for a job which was triggered by upstream job, etc. This is mainly used to identify the nature of the builds - be it nightly, manual, automated, etc.
+
+logo
+Get Access to 250+ Guides with Scaler Mobile App!
+Experience free learning content on the Scaler Mobile App
+logo
+4.5
+100K+
+Play Store
+3. How Jenkins knows when to execute a Scheduled job/pipeline and how it is triggered?
+Jenkins master will have the cron entries set up for the jobs as per the scheduled Job's configurations. As and when the time for a particular job comes, it commands agents (based on the configuration of the job) to execute the job with required configurations.
+
+4. What are the credential types supported by Jenkins?
+In Jenkins, credentials are a set of information used for authentication with internal/external services to accomplish an action. Jenkins credentials are provisioned & managed by a built-in plugin called - Credentials Binding - plugin. Jenkins can handle different credentials as follows -
+
+Secret text - A token such as an API token, JSON token, etc.
+Username and password - Basic Authentication can be stored as a credential as well.
+Secret file - A secret file used to authenticate some secure data services & security handshakes.
+SSH Username with a private key - An SSH public/private key pair for Machine to Machine authentication.
+Certificate - a PKCS#12 certificate file and an optional password.
+Docker Host Certificate Authentication credentials.
+And as we can guess, this can be extended to several other extensible credential types like - AWS credential, Azure secrets, etc. using commonly available plugins.
+
+5. What are the Scopes of Jenkins Credentials?
+Jenkins credentials can be of one of the two scopes - Global & System
+
+Global - the credential will be usable across all the jobs configured in the Jenkins instance (i.e. for all jobs). This is more suited for user Jobs (i.e. for the freestyle, pipeline, or other jobs) to authenticate itself with target services/infrastructures to accomplish the purpose of the job)
+
+System - This is a special scope that will allow the Jenkins itself (i.e. the core Jenkins functionalities & some installed plugins) to authenticate itself to external services/infrastructures to perform some defined tasks. E.g. sending emails, etc.
+
+6. What is a Jenkins Shared Library and how it is useful?
+As an organization starts using more and more pipeline jobs, there is a chance for more and more code being duplicated in every pipeline job, since a part of the build/automation processes will be the same for most of the jobs. In such a situation, every other new upcoming job should also duplicate the same piece of code. To avoid duplications, the Jenkins project brought in the concept of Shared Libraries, to code - DRY - Don't Repeat Yourself.
+
+Shared libraries are a set of code that can be common for more than one pipeline job and can be maintained separately. Such libraries improve the maintenance, modularity & readability of the pipeline code. And it also speeds up the automation for new jobs.
+
+7. How Jenkins jobs can be Triggered/Stopped/Controlled programmatically?
+Jenkins Remote Access API can be used to do things like -
+
+Retrieving information about jobs, views, nodes, builds, etc. from Jenkins for programmatic consumption.
+Trigger a build (both parameterized & non-parameterized), stop/abort a build, enable/disable a Job, group/remove jobs into/from views, etc.
+Create/copy/modify/delete jobs.
+and many other programming language-specific functionalities. It has wrappers for main programming languages like - Python, Ruby & Java. It can be triggered via CURL as below -
+
+Jobs without parameters
+
+Simply an HTTP POST on JENKINS_URL/job/JOBNAME/build.
+
+Jobs with parameters
+
+Simple example - sending "String Parameters":
+
+curl JENKINS_URL/job/JOB_NAME/buildWithParameters  --user USER:TOKEN --data id=123 --data verbosity=high
+
+8. How to get the Jenkins version programmatically in Jobs/Pipelines or nodes other than master?
+To check the version of Jenkins, load the top-level page or any top-level Remote Access API path like the '.../api/*' page and then check for the 'X-Jenkins' response header.
+
+This contains the version number of Jenkins, like "1.404". This is also a good way to check if an URL is a Jenkins URL.
+
+9. What happens when a Jenkins agent is offline and what is the best practice in that situation?
+When a job is tied to a specific agent on a specific node, the job can only be run on that agent and no other agents can fulfill the job request. If the target node is offline or all the agents on that particular node are busy building other jobs, then the triggered job has to wait until the node comes online or an agent from that node becomes available to execute the triggered build request.
+
+As a result, a triggered job may sometimes wait indefinitely without knowing that the target node is offline. So, it is always the best practice to tie the jobs to a group of nodes & agents, referred to with a 'Label'. Once a job is tied to a Label, instead of a specific node/agent, any of the nodes/agents falling under the label can fulfill a build request, when a job is triggered. This way we can reduce the overall turn-around time of the builds.
+
+Even then if a job is waiting for more time for the nodes/agents, then it is time to consider adding more nodes/agents.
+
+10. What is the Blue Ocean?
+Blue Ocean is the redefined user experience for Jenkins. Designed from the ground up for Jenkins Pipeline, it is still compatible with freestyle jobs, Blue Ocean reduces clutter and increases clarity. Blue Ocean’s main features include -
+
+Sophisticated visualizations of continuous delivery (CD) Pipelines, allowing for fast and intuitive comprehension of your Pipeline’s status.
+Pipeline editor - makes the creation of Pipelines approachable by guiding the user through an intuitive and visual process to create a Pipeline.
+Personalization to suit the role-based needs of each member of the team.
+Pinpoint precision when intervention is needed and/or issues arise. Blue Ocean shows where in the pipeline attention is needed, facilitating exception handling and increasing productivity.
+Native integration for branch and pull requests, enables maximum developer productivity when collaborating on code with others in GitHub, Bitbucket, etc.
+Conventional UI - Job Details Page
+
+
+Conventional UI Jenkins
+11. What is the Jenkins User Content service?
+Jenkins has a mechanism known as "User Content", where administrators can place files inside the $JENKINS_HOME/userContent folder and these files are served from yourhost/jenkins/userContent.
+
+This can be thought of as a mini HTTP server to serve images, stylesheets, and other static resources that you can use from various description fields inside Jenkins.
+
