@@ -1,0 +1,14 @@
+pipeline{
+    agent any
+    stages{
+        environment {
+        var1 = 'This is a var1 variable called from environment directive'
+        }
+        stage('Test-env'){
+            steps{
+                echo "Environment variable:$var1"
+            }
+        }
+
+     }
+}
