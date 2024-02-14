@@ -20,7 +20,7 @@ pipeline{
             }
             
         }
-        stage('Environment-Test"){
+        stage('Environment-Test'){
                 steps{
                 echo "This is Environment variable: $var1"
                 }
