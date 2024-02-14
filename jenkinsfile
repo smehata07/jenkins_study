@@ -1,5 +1,8 @@
 pipeline{
     agent any
+    environment{
+    var1 = 'Sonu Mehata'
+    }
     stages{
         stage('Build'){
             steps{
@@ -15,6 +18,12 @@ pipeline{
             steps{
                 echo "This is a Deploy stage of your pipeline"
             }
+            
+        }
+        stage('Environment-Test"){
+                steps{
+                echo "This is Environment variable: $var1"
+                }
         }
     }
 }
